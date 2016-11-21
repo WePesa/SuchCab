@@ -1,5 +1,6 @@
 (ns suchcab.views
     (:require 
+      [suchcab.components :as c]
       [reagent.core :as r]
       [re-frame.core :as re-frame]))
 
@@ -17,38 +18,6 @@
 
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; REUSABLE COMPONENTS!
-
-(defn sc-input 
-  ([atm input-type id]
-    [:input 
-     {:id id
-      :type input-type
-      :on-change #((reset! atm (-> % .-target .-value)))}])
-  ([atm input-type id placeholder]
-   (assoc-in (sc-input atm input-type id) [1 :placeholder] placeholder)))
-
-(defn sc-submit [id label on-click ]
-  [:button { :id id
-             :on-click on-click} label "!"])
-
-;TODO FIX THESE DAMN RANGE COMPONENTS ?
-
-(defn sc-field [label cmp]
-  [:div.form-group
-   [:label.control-label.col-lg-2 label]
-   [:div.col-lg-10 cmp]])
-
-(defn sc-range [atm id low high]
- (let [input (sc-input atm "range" id)
-       input-map (get input 1)]
-    (assoc input 1 (assoc input-map :low low :high high :value @atm :step 1)))) 
-
-(defn sc-label-range [atm id low high]
-  ((sc-field @atm (sc-range atm id low high))))
-
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; PANELS!
 
@@ -57,9 +26,9 @@
         password (r/atom "")]
     (fn []
       [:div#login-panel 
-        (sc-input username "text" "login-user-input" "username")
-        (sc-input password "password" "login-pass-input" "password")
-        (sc-submit "login-user-submit" "Log In"  #(login-handler username password))])))
+        (c/text username "text" "login-user-input" "username")
+        (c/text password "password" "login-pass-input" "password")
+        (c/submit "login-user-submit" "Log In"  #(login-handler username password))])))
 
 ; Signup page
 ;   Name / phone number / email / payment (coinbase probably?)
@@ -79,11 +48,11 @@
         email    (r/atom "")]
     (fn [] 
       [:div#signup-panel
-       (sc-input username "text" "signup-user-input" "username")
-       (sc-input password "password" "signup-user-input" "password")
-       (sc-input phone "tel" "signup-phone-input" "phone-number")
-       (sc-input email "email" "signup-email-input" "email address")
-       (sc-submit "signup-submit" "Submit User Info" #(signup-handler username password phone email))])))
+       (c/text username "text" "signup-user-input" "username")
+       (c/text password "password" "signup-user-input" "password")
+       (c/text phone "tel" "signup-phone-input" "phone-number")
+       (c/text email "email" "signup-email-input" "email address")
+       (c/submit "signup-submit" "Submit User Info" #(signup-handler username password phone email))])))
 
 ; Driver Signup
 ;   Own name 
@@ -104,9 +73,9 @@
         company (r/atom "")]
     (fn []
       [:div#driver-signup-panel
-       (sc-input real-name "text" "driver-signup-name" "Real Name")
-       (sc-input company "text" "driver-signup-company" "Company")
-       (sc-submit "driver-signup-submit" "Submit Driver Info" #(driver-signup-handler real-name company))])))
+       (c/text real-name "text" "driver-signup-name" "Real Name")
+       (c/text company "text" "driver-signup-company" "Company")
+       (c/submit "driver-signup-submit" "Submit Driver Info" #(driver-signup-handler real-name company))])))
 
 ; Logged in: Customer idle
 
@@ -132,7 +101,7 @@
       [:label.col-lg-2.control-label @price]]
      [:div.form-group
       [:div.col-lg-10
-       [:input {:type "number" :min 15 :max 100 :id "request-price-input"
+       [:input {:type "range" :min 15 :max 100 :id "request-price-input"
                 :on-change #(reset! price (-> % .-target .-value))}]]]])))
 
 ;    offer
