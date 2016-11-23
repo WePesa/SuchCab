@@ -7,7 +7,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; S U C H <> C A B ;;
 ;;;;;;;;;;;;;;;;;;;;;;
-
 ; PANELS TO BUILD
 
 ; Login page
@@ -26,8 +25,8 @@
         password (r/atom "")]
     (fn []
       [:div#login-panel 
-        (c/text username "text" "login-user-input" "username")
-        (c/text password "password" "login-pass-input" "password")
+        (c/in username "text" "login-user-input" "username")
+        (c/in password "password" "login-pass-input" "password")
         (c/submit "login-user-submit" "Log In"  #(login-handler username password))])))
 
 ; Signup page
@@ -48,10 +47,10 @@
         email    (r/atom "")]
     (fn [] 
       [:div#signup-panel
-       (c/text username "text" "signup-user-input" "username")
-       (c/text password "password" "signup-user-input" "password")
-       (c/text phone "tel" "signup-phone-input" "phone-number")
-       (c/text email "email" "signup-email-input" "email address")
+       (c/in username "text" "signup-user-input" "username")
+       (c/in password "password" "signup-user-input" "password")
+       (c/in phone "tel" "signup-phone-input" "phone-number")
+       (c/in email "email" "signup-email-input" "email address")
        (c/submit "signup-submit" "Submit User Info" #(signup-handler username password phone email))])))
 
 ; Driver Signup
@@ -73,8 +72,8 @@
         company (r/atom "")]
     (fn []
       [:div#driver-signup-panel
-       (c/text real-name "text" "driver-signup-name" "Real Name")
-       (c/text company "text" "driver-signup-company" "Company")
+       (c/in real-name "text" "driver-signup-name" "Real Name")
+       (c/in company "text" "driver-signup-company" "Company")
        (c/submit "driver-signup-submit" "Submit Driver Info" #(driver-signup-handler real-name company))])))
 
 ; Logged in: Customer idle
@@ -82,11 +81,6 @@
 ;  ride-request panel
 ;    [price start (optional: description end)]
 ;      submit-button
-;  active offers
-;  special offers
-;    description
-;     available hours
-;     rate
 
 (defn ride-request-panel []
   (let [price        (r/atom 20)
@@ -96,13 +90,22 @@
         end-point    (r/atom false)
         description  (r/atom "pedicab ride")]
     (fn []
-    [:div 
-     [:div.form-group
-      [:label.col-lg-2.control-label @price]]
-     [:div.form-group
-      [:div.col-lg-10
-       [:input {:type "range" :min 15 :max 100 :id "request-price-input"
-                :on-change #(reset! price (-> % .-target .-value))}]]]])))
+      [:div 
+         [:div 
+          [:h4 "price"] 
+          (c/lbl-range price "request-price-input" 15 100)]
+         [:div 
+          [:h4 "start time"] 
+          (c/time-field start-time "request-start-time" (js/Date.))]
+         [:div 
+          [:h4 "end time"] 
+          (c/time-field end-time "request-start-time" (js/Date.))]])))
+
+;  active offers
+;  special offers
+;    description
+;     available hours
+;     rate
 
 ;    offer
 ;     terms (one of the following)
