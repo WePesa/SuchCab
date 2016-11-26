@@ -47,11 +47,14 @@
        input-map (get input 1)]
     (assoc input 1 (assoc input-map :min low :max high :value @atm :step 1))))
 
+;labeled form-element
 (defn lblcmp [label cmp]
-  [:div.container
-    [:div.col-xs-2
+  [:div.form-group
+    [:div.col-lg-2
        [:label.control-label label]]
-    [:div.col-xs-10 cmp]])
+    [:div.col-lg-10 cmp]])
+
+
 
 (defn lbl-range [atm id low high]
     (lblcmp @atm (range-input atm id low high)))

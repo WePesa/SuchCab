@@ -8,3 +8,11 @@
   height: 50px;
   font-size:2em;
 }
+.scbox {
+ border-radius:3px;
+ border-color: #999;
+ background: #faa;
+
+ margin-top: 4px;
+ padding: 4px;
+}

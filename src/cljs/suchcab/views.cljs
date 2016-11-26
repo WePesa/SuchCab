@@ -24,7 +24,7 @@
   (let [username (r/atom "")
         password (r/atom "")]
     (fn []
-      [:div#login-panel 
+      [:div#login-panel.container-fluid
         (c/in username "text" "login-user-input" "username")
         (c/in password "password" "login-pass-input" "password")
         (c/submit "login-user-submit" "Log In"  #(login-handler username password))])))
@@ -43,14 +43,21 @@
 (defn signup-panel []
   (let [username (r/atom "")
         password (r/atom "")
+        password2 (r/atom "")
         phone    (r/atom "")
         email    (r/atom "")]
     (fn [] 
-      [:div#signup-panel
-       (c/in username "text" "signup-user-input" "username")
-       (c/in password "password" "signup-user-input" "password")
-       (c/in phone "tel" "signup-phone-input" "phone-number")
-       (c/in email "email" "signup-email-input" "email address")
+      [:div#signup-panel.form-horizontal
+       (c/lblcmp "username" 
+         (c/in username "text" "signup-user-input" "username"))
+       (c/lblcmp "password" 
+         (c/in password "password" "signup-pass-input" "password"))
+       (c/lblcmp "repeat password"
+         (c/in password2 "password" "signup-pass2-input" "repeat password"))
+       (c/lblcmp "phone number" 
+         (c/in phone "tel" "signup-phone-input" "phone-number"))
+       (c/lblcmp "email address"
+         (c/in email "email" "signup-email-input" "email address"))
        (c/submit "signup-submit" "Submit User Info" #(signup-handler username password phone email))])))
 
 ; Driver Signup
@@ -61,19 +68,17 @@
 ;   references 
 ;   picture
 (defn driver-signup-handler [real-name company] 
-  (js/console.log 
-    "real-name: "
-    @real-name
-    "\ncompany  : "
-    @company))
+  (js/console.log "real-name: " @real-name "\ncompany  : " @company))
 
 (defn driver-signup-panel []
   (let [real-name (r/atom "")
         company (r/atom "")]
     (fn []
-      [:div#driver-signup-panel
-       (c/in real-name "text" "driver-signup-name" "Real Name")
-       (c/in company "text" "driver-signup-company" "Company")
+      [:div#driver-signup-panel.form-horizontal
+       (c/lblcmp "Real Name" 
+         (c/in real-name "text" "driver-signup-name" "Real Name"))
+       (c/lblcmp "Company name"
+         (c/in company "text" "driver-signup-company" "Company"))
        (c/submit "driver-signup-submit" "Submit Driver Info" #(driver-signup-handler real-name company))])))
 
 ; Logged in: Customer idle
@@ -82,7 +87,22 @@
 ;    [price start (optional: description end)]
 ;      submit-button
 
-(defn ride-request-panel []
+(defn hail-a-cab [] 
+  [:div.container-fluid
+   [:div
+
+   ; avg price of x available
+   [:h5 ""]
+   ; offer price per person
+   ; origin
+   ; destination
+   ; # people 
+   ; ("2 or 3 is cozy, 4 is a squeeze")
+   
+   ]])
+
+
+(defn reserve-a-ride []
   (let [price        (r/atom 20)
         start-time   (r/atom 0)
         end-time     (r/atom 0)
@@ -90,16 +110,25 @@
         end-point    (r/atom false)
         description  (r/atom "pedicab ride")]
     (fn []
-      [:div 
+      [:div.container-fluid 
          [:div 
           [:h4 "price"] 
           (c/lbl-range price "request-price-input" 15 100)]
-         [:div 
-          [:h4 "start time"] 
-          (c/time-field start-time "request-start-time" (js/Date.))]
-         [:div 
-          [:h4 "end time"] 
-          (c/time-field end-time "request-start-time" (js/Date.))]])))
+          
+         [:div#request-options.hidden 
+          [:div 
+            [:h4 "start time"] 
+            (c/time-field start-time "request-start-time" (js/Date.))]
+          [:div 
+            [:h4 "end time"] 
+            (c/time-field end-time "request-start-time" (js/Date.))]
+          ; origin
+          ; # passengers
+          ; destination (optional)
+          ; notes (required if destination is blank)
+          ; calculated cost
+          ; your offer
+          ]])))
 
 ;  active offers
 ;  special offers
@@ -166,9 +195,10 @@
   ; first, check if theres a cookie.
   (let [name (re-frame/subscribe [:name])]
     (fn []
-      [:div 
+      [:div.col-xs-8
        [:h2 "List of components so far" ]
        (demo-panel "login-panel" login-panel)
        (demo-panel "signup-panel" signup-panel)
        (demo-panel "driver-signup-panel" driver-signup-panel)
-       (demo-panel "ride-request-panel" ride-request-panel)])))
+       (demo-panel "ride-request-panel" reserve-a-ride)
+       (demo-panel "hail-a-cab-panel" hail-a-cab)])))
