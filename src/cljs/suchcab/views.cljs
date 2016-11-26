@@ -12,10 +12,8 @@
 ; Login page
 
 ;TODO: Form validation!
-(defn login-handler [usr pass] (js/console.log "submitting username: " @usr "\npassword: " @pass "\n"))
-
-
-
+(defn login-handler [usr pass] 
+  (js/console.log "submitting username: " @usr "\npassword: " @pass "\n"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; PANELS!
@@ -88,19 +86,30 @@
 ;      submit-button
 
 (defn hail-a-cab [] 
-  [:div.container-fluid
-   [:div
-
-   ; avg price of x available
-   [:h5 ""]
-   ; offer price per person
-   ; origin
-   ; destination
-   ; # people 
-   ; ("2 or 3 is cozy, 4 is a squeeze")
-   
-   ]])
-
+  (let [price (r/atom 20)
+        origin (r/atom "start address")
+        destination (r/atom "destination address")
+        num-people (r/atom 2)
+        details (r/atom "")
+        ]
+    (fn []
+      [:div.container-fluid
+        [:div.form-horizontal 
+          ; offer price per person
+          (c/lblcmp "price" 
+              (c/in price "number" "hail-price-input" @price))
+          ; location of origin
+          (c/lblcmp "origin"
+              (c/in origin "text" "hail-origin-input" @origin))
+          ; destination
+          (c/lblcmp "destination"
+              (c/in destination "text" "hail-destination-input" @destination))
+          ; # people 
+          (c/lblcmp "# of people"
+              (c/in num-people "number" "hail-numppl-input" @num-people))
+          ; ("2 or 3 is cozy, 4 is a squeeze")
+          (c/lblcmp "details"
+              (c/in details "number" "hail-details-input" @details))]])))
 
 (defn reserve-a-ride []
   (let [price        (r/atom 20)
@@ -111,17 +120,15 @@
         description  (r/atom "pedicab ride")]
     (fn []
       [:div.container-fluid 
-         [:div 
-          [:h4 "price"] 
-          (c/lbl-range price "request-price-input" 15 100)]
+        [:div.form-horizontal 
+          (c/lblcmp "price"
+           (c/lbl-range price "request-price-input" 15 100))
           
-         [:div#request-options.hidden 
-          [:div 
-            [:h4 "start time"] 
-            (c/time-field start-time "request-start-time" (js/Date.))]
-          [:div 
-            [:h4 "end time"] 
-            (c/time-field end-time "request-start-time" (js/Date.))]
+          (c/lblcmp "start time"
+           (c/time-field start-time "request-start-time" (js/Date.)))
+
+          (c/lblcmp "end time"
+           (c/time-field end-time "request-start-time" (js/Date.)))
           ; origin
           ; # passengers
           ; destination (optional)

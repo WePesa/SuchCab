@@ -54,8 +54,6 @@
        [:label.control-label label]]
     [:div.col-lg-10 cmp]])
 
-
-
 (defn lbl-range [atm id low high]
     (lblcmp @atm (range-input atm id low high)))
 
@@ -64,11 +62,12 @@
         hour   (. d getHours)
         am-pm  (r/atom  (if (and (>= hour 12) (not= hour 24)) "pm" "am"))
         hour   (r/atom (if (zero? (mod hour 12)) 12 hour))
-        minute (r/atom (. d getMinutes))
+        minute (. d getMinutes)
+        minute (r/atom (if (< minute 10) (str "0" minute) minute))
         the-time (r/atom (str @hour ":" @minute))]
-  [:div {:id id} 
-   (toggle-class (in hour "text" (str id "-hour") @hour) "time")
-   [:strong ":"]
-   (toggle-class (in minute "text" (str id "-minute") @minute) "time")
-   (toggle-class (select am-pm (str id "-am-pm") [:am "AM" :pm "PM"])
-                 "time-select")]))
+    [:div {:id id} 
+    (toggle-class (in hour "text" (str id "-hour") @hour) "time")
+    [:strong ":"]
+    (toggle-class (in minute "text" (str id "-minute") @minute) "time")
+    (toggle-class (select am-pm (str id "-am-pm") [:am "AM" :pm "PM"])
+                  "time-select")]))
