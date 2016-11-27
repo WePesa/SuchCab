@@ -19,6 +19,9 @@
                  (conj classes cl))]
     (assoc-in el [1 :class] (s/join " " new-cl))))
 
+(defn link [txt url]
+  [:a {:href url} txt])
+
 (defn in
   ([atm input-type]
     [:input

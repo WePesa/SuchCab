@@ -13,7 +13,8 @@
 
 ;TODO: Form validation!
 (defn login-handler [usr pass] 
-  (js/console.log "submitting username: " @usr "\npassword: " @pass "\n"))
+  (js/console.log 
+    "submitting username: " @usr "\npassword: " @pass "\n"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; PANELS!
@@ -25,7 +26,8 @@
       [:div#login-panel.container-fluid
         (c/in username "text" "login-user-input" "username")
         (c/in password "password" "login-pass-input" "password")
-        (c/submit "login-user-submit" "Log In"  #(login-handler username password))])))
+        (c/submit "login-user-submit" "Log In"  
+                  #(login-handler username password))])))
 
 ; Signup page
 ;   Name / phone number / email / payment (coinbase probably?)
@@ -48,10 +50,12 @@
       [:div#signup-panel.form-horizontal
        (c/lblcmp "username" 
          (c/in username "text" "signup-user-input" "username"))
-       (c/lblcmp "password" 
-         (c/in password "password" "signup-pass-input" "password"))
-       (c/lblcmp "repeat password"
-         (c/in password2 "password" "signup-pass2-input" "repeat password"))
+       [:div.col-xs-6.nopad
+        (c/lblcmp "password" 
+          (c/in password "password" "signup-pass-input" "password"))]
+       [:div.col-xs-6.nopad 
+        (c/lblcmp "repeat password"
+          (c/in password2 "password" "signup-pass2-input" "repeat password"))]
        (c/lblcmp "phone number" 
          (c/in phone "tel" "signup-phone-input" "phone-number"))
        (c/lblcmp "email address"
@@ -147,7 +151,31 @@
           (c/lblcmp "details"
               (c/in details "number" "hail-details-input" @details))]])))
 
+
+(defn offer [co dr price desc start finish]
+  [:div.container-fluid.offer
+   [:div.col-xs-6 
+     ; company 
+    [:div.co (c/link co "#")]
+     ; driver
+    [:div.dr (c/link dr "#")]
+     ;  offer-start-time, offer-finish-time
+    [:div [:u "from " start " to " finish]]
+    ]
+   [:div.col-xs-6
+    ; price
+    [:h3 price]
+   ; description
+    [:p desc]
+   ]])
+
 ;  active offers
+(defn offer-list [] 
+  [:ul.offer-list
+   [:li (offer "Rogue Pedicab" "Max Jackson" "$20" "1 mile ride" "12pm" "12am")]
+   [:li (offer "Rogue Pedicab" "Max Jackson" "$20" "1 mile ride" "12pm" "12am")]
+   ; for-each offer [:li (offer ...)]
+  ])
 
 ;  special offers
 ;    description
@@ -206,6 +234,7 @@
 ;     name/phonenumber
 ;     picture
 
+
 (defn demo-panel [label component]
   [:div.scbox [:h4 label] [component] ])
 
@@ -219,4 +248,5 @@
        (demo-panel "signup-panel" signup-panel)
        (demo-panel "driver-signup-panel" driver-signup-panel)
        (demo-panel "ride-request-panel" reserve-a-ride)
-       (demo-panel "hail-a-cab-panel" hail-a-cab)])))
+       (demo-panel "hail-a-cab-panel" hail-a-cab)
+       (demo-panel "offers-list-panel" offer-list)])))

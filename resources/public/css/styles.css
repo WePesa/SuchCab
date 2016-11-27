@@ -19,3 +19,35 @@
 #demo{
     margin: 18px;
 }
+.nopad{
+  padding:0;
+}
+li>.offer{
+  border-bottom:1px solid #ccc;
+  background: #fff;
+  padding:0;
+  margin:0;
+}
+li:last-child>.offer{
+  border-bottom:0px;
+}
+.offer p{margin: 0 0 3px;}
+.offer .co, .offer .dr{
+  display: inline-block;
+  padding: 0 5px 0 0;
+}
+.offer a {
+  color:#222;
+}
+.offer .co {
+  font-size: 1.2em;
+}
+.offer h3{ margin:0;}
+ul.offer-list {
+  list-style: none;
+  padding-left:0;
+}
+ul.offer-list li {
+ /*padding: 2px 0;*/
+ text-indent:0px;
+}
