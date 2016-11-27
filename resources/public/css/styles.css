@@ -1,3 +1,4 @@
+
 .time {
   width: 50px;
   height: 50px;
@@ -9,10 +10,12 @@
   font-size:2em;
 }
 .scbox {
- border-radius:3px;
+ border-radius:7px;
  border-color: #999;
  background: #faa;
-
  margin-top: 4px;
- padding: 4px;
+ padding: 10px;
+}
+#demo{
+    margin: 18px;
 }

@@ -84,6 +84,8 @@
 ;  ride-request panel
 ;    [price start (optional: description end)]
 ;      submit-button
+(defn hail-handler [price origin dest num-ppl deets]
+  (js/console.log "price: " price "\norigin: " origin "\ndest: " dest "\nnum-ppl: " num-ppl "\ndeets: " deets))
 
 (defn hail-a-cab [] 
   (let [price (r/atom 20)
@@ -109,15 +111,17 @@
               (c/in num-people "number" "hail-numppl-input" @num-people))
           ; ("2 or 3 is cozy, 4 is a squeeze")
           (c/lblcmp "details"
-              (c/in details "number" "hail-details-input" @details))]])))
+              (c/in details "number" "hail-details-input" @details))
+          (c/submit "hail-submit" "Find a cab" #(hail-handler @price @origin @destination @num-people @details))]])))
 
 (defn reserve-a-ride []
   (let [price        (r/atom 20)
         start-time   (r/atom 0)
         end-time     (r/atom 0)
-        origin-point (r/atom false)
+        origin (r/atom false)
         end-point    (r/atom false)
-        description  (r/atom "pedicab ride")]
+        num-people   (r/atom 2)
+        details  (r/atom "pedicab ride")]
     (fn []
       [:div.container-fluid 
         [:div.form-horizontal 
@@ -130,14 +134,21 @@
           (c/lblcmp "end time"
            (c/time-field end-time "request-start-time" (js/Date.)))
           ; origin
-          ; # passengers
+          (c/lblcmp "origin"
+              (c/in origin "text" "request-origin-input" @origin))
           ; destination (optional)
+          (c/lblcmp "destination"
+              (c/in origin "text" "request-destination-input" @origin))
+          ; # passengers
+          ; # people 
+          (c/lblcmp "# of people"
+              (c/in num-people "number" "hail-numppl-input" @num-people))
           ; notes (required if destination is blank)
-          ; calculated cost
-          ; your offer
-          ]])))
+          (c/lblcmp "details"
+              (c/in details "number" "hail-details-input" @details))]])))
 
 ;  active offers
+
 ;  special offers
 ;    description
 ;     available hours
@@ -202,7 +213,7 @@
   ; first, check if theres a cookie.
   (let [name (re-frame/subscribe [:name])]
     (fn []
-      [:div.col-xs-8
+      [:div#demo.col-xs-8
        [:h2 "List of components so far" ]
        (demo-panel "login-panel" login-panel)
        (demo-panel "signup-panel" signup-panel)
