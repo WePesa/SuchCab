@@ -13,6 +13,7 @@
   (conj parent child))
 
 (defn toggle-class [el cl]
+  ; only works with {:class "class1 class2"} not with [:div.classname ]
   (let [classes (set (s/split (:class (el 1)) " "))
         new-cl (if (contains? classes cl)
                  (disj classes cl)

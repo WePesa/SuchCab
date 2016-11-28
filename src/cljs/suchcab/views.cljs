@@ -153,8 +153,8 @@
 
 
 (defn offer [co dr price desc start finish]
-  [:div.container-fluid.offer
-   [:div.col-xs-6 
+  [:div {:class "container-fluid offer"}
+   [:div.col-xs-5 
      ; company 
     [:div.co (c/link co "#")]
      ; driver
@@ -162,18 +162,36 @@
      ;  offer-start-time, offer-finish-time
     [:div [:u "from " start " to " finish]]
     ]
-   [:div.col-xs-6
+   [:div.col-xs-2
     ; price
-    [:h3 price]
+    [:h3 price]]
+   [:div.col-xs-3
    ; description
     [:p desc]
    ]])
+
+;  Expanded Offer
+;     driver
+;       Company
+;       Full Name
+;       Picture
+;     consider... 
+;       call or chat
+;       counter-offer
+;       confirm
+
+(defn expanded-offer [co dr price desc start finish]
+  (c/toggle-class 
+    (conj (offer co dr price desc start finish)
+      [:div.col-xs-2 [:button.offer-button "go!"]])
+    "expanded-offer"))
 
 ;  active offers
 (defn offer-list [] 
   [:ul.offer-list
    [:li (offer "Rogue Pedicab" "Max Jackson" "$20" "1 mile ride" "12pm" "12am")]
    [:li (offer "Rogue Pedicab" "Max Jackson" "$20" "1 mile ride" "12pm" "12am")]
+   [:li (expanded-offer "Rogue Pedicab" "Max Jackson" "$20" "1 mile ride" "12pm" "12am")]
    ; for-each offer [:li (offer ...)]
   ])
 
@@ -187,14 +205,7 @@
 ;      - x dollars for y minutes
 ;      - x dollars flat rate
 ;      
-;     driver
-;       Company
-;       Full Name
-;       Picture
-;     consider... 
-;       call or chat
-;       counter-offer
-;       confirm
+;  
 
 ; confirm: waiting driver confirmation
 ;    small panel

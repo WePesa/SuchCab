@@ -47,6 +47,9 @@ ul.offer-list {
   list-style: none;
   padding-left:0;
 }
+.offer.expanded-offer{
+  background:#cfc;
+}
 ul.offer-list li {
  /*padding: 2px 0;*/
  text-indent:0px;
